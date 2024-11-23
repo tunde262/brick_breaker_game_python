@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import asyncio # -- for web hosting purposes with pygbag --
 
 pygame.init()
 
@@ -7,7 +8,7 @@ screen_width = 600
 screen_height = 600
 
 screen = pygame.display.set_mode( ( screen_width, screen_height ) )
-pygame.display.set_caption('Breakout')
+pygame.display.set_caption('Brick Breaker')
 
 # define font
 font = pygame.font.SysFont('Constantia', 30)
@@ -219,47 +220,56 @@ player_paddle = Paddle()
 # creat ball
 ball = Game_Ball(player_paddle.x + (player_paddle.width // 2), player_paddle.y - player_paddle.height)
 
+async def main(): # -- for web hosting purposes with pygbag --
+    global live_ball, game_over 
 
-run = True
-while run:
+    run = True
+    while run:
 
-    clock.tick(fps)
-    screen.fill(bg)
+        clock.tick(fps)
+        screen.fill(bg)
 
-    # draw all objects
-    wall.draw_wall()
-    player_paddle.draw()
-    ball.draw()
+        # draw all objects
+        wall.draw_wall()
+        player_paddle.draw()
+        ball.draw()
 
-    if live_ball:
-        # draw paddle
-        player_paddle.move()
-        # draw ball
-        game_over = ball.move()
-        if game_over != 0:
-            live_ball = False
-    
-    # print player intstructions
-    if not live_ball:
-        if game_over == 0:
-            draw_text('CLICK ANYWHERE TO START', font, text_col, 100, screen_height // 2 + 100)
-        elif game_over == 1:
-            draw_text('YOU WON!', font, text_col, 240, screen_height // 2 + 50)
-            draw_text('CLICK ANYWHERE TO START', font, text_col, 100, screen_height // 2 + 100)
-        elif game_over == -1:
-            draw_text('YOU LOST!', font, text_col, 240, screen_height // 2 + 50)
-            draw_text('CLICK ANYWHERE TO START', font, text_col, 100, screen_height // 2 + 100)
-    
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        if event.type == pygame.MOUSEBUTTONDOWN and live_ball == False:
-            live_ball = True
-            ball.reset(player_paddle.x + (player_paddle.width // 2), player_paddle.y - player_paddle.height)
-            player_paddle.reset()
-            wall.create_wall()
-    
-    pygame.display.update()
+        if live_ball:
+            # draw paddle
+            player_paddle.move()
+            # draw ball
+            game_over = ball.move()
+            if game_over != 0:
+                live_ball = False
+        
+        # print player intstructions
+        if not live_ball:
+            if game_over == 0:
+                draw_text('CLICK ANYWHERE TO START', font, text_col, 100, screen_height // 2 + 100)
+            elif game_over == 1:
+                draw_text('YOU WON!', font, text_col, 240, screen_height // 2 + 50)
+                draw_text('CLICK ANYWHERE TO START', font, text_col, 100, screen_height // 2 + 100)
+            elif game_over == -1:
+                draw_text('YOU LOST!', font, text_col, 240, screen_height // 2 + 50)
+                draw_text('CLICK ANYWHERE TO START', font, text_col, 100, screen_height // 2 + 100)
+        
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.MOUSEBUTTONDOWN and live_ball == False:
+                live_ball = True
+                ball.reset(player_paddle.x + (player_paddle.width // 2), player_paddle.y - player_paddle.height)
+                player_paddle.reset()
+                wall.create_wall()
+        
+        pygame.display.update()
 
-pygame.quit()
+        await asyncio.sleep(0) # -- for web hosting purposes with pygbag --
+
+# -- for web hosting purposes with pygbag --
+asyncio.run(main())
+
+# -- original python version --
+
+# pygame.quit()
