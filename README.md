@@ -1,6 +1,6 @@
 # Brick Breaker Game
 
-A simple Brick Breaker game implemented using Python and the Pygame library. The game includes a paddle, a bouncing ball, and destructible bricks. Players can control the paddle to keep the ball in play and break all the bricks to win. 
+A simple Brick Breaker game implemented using **Python** and **Pygame**. The game includes a paddle, a bouncing ball, and destructible bricks. Players can control the paddle to keep the ball in play and break all the bricks to win. 
 
 The program also includes optional web hosting support using **asyncio** & **pygbag**.
 
